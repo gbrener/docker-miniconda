@@ -1,0 +1,19 @@
+FROM gbrener/miniconda:3
+
+# Set default username to "default"
+ARG USERNAME=default
+
+# Create $USERNAME user:
+RUN useradd --create-home \
+            --shell /bin/bash \
+            --user-group \
+            --groups conda \
+            $USERNAME && \
+    echo "$USERNAME:$USERNAME" | chpasswd && \
+    umask 002
+
+USER $USERNAME
+WORKDIR /home/$USERNAME
+
+# Add miniconda to path
+ENV PATH="/opt/conda/bin:${PATH}"
